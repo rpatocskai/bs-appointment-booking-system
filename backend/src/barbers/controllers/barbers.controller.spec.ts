@@ -5,7 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AxiosResponse } from 'axios';
 import { of, throwError } from 'rxjs';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { BarbersService } from './barbers.service.js';
+import { BarbersService } from '../services/barbers.service.js';
 
 describe('BarbersService', () => {
   let service: BarbersService;
