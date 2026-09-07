@@ -3,7 +3,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 
-import { Button } from "../../../components/ui/Button";
+import { Button } from "../../../components/ui/button/Button";
 import type { Barber, WorkSchedule } from "../types/barber.types";
 
 interface BarberCardProps {
