@@ -11,7 +11,7 @@ Online appointment booking system for barbershops that allows customers to book 
 - React
 - TypeScript
 - MUI
-- TanStack Query
+- Axios
 - Playwright
 
 ### Backend
