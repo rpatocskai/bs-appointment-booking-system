@@ -6,6 +6,7 @@ import { OpeningHoursValidator } from './validators/opening-hours.validator.js';
 import { BusinessDayValidator } from './validators/business-day.validator.js';
 import { PastDateValidator } from './validators/past-date.validator.js';
 import { TimeSlotGeneratorService } from './services/time-slot-generator.service.js';
+import { OverlapValidator } from './validators/overlap.validator.js';
 
 @Module({
   controllers: [BookingsController],
@@ -15,6 +16,7 @@ import { TimeSlotGeneratorService } from './services/time-slot-generator.service
     OpeningHoursValidator,
     BusinessDayValidator,
     PastDateValidator,
+    OverlapValidator,
     { provide: 'IBookingRepository', useClass: JsonBookingRepository },
   ],
   exports: [BookingsService],

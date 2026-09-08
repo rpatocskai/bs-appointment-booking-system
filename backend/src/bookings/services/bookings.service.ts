@@ -7,6 +7,7 @@ import {
   TimeSlot,
   TimeSlotGeneratorService,
 } from './time-slot-generator.service.js';
+import { OverlapValidator } from '../validators/overlap.validator.js';
 
 @Injectable()
 export class BookingsService {
@@ -17,6 +18,7 @@ export class BookingsService {
     private readonly businessDayValidator: BusinessDayValidator,
     private readonly pastDateValidator: PastDateValidator,
     private readonly timeSlotGenerator: TimeSlotGeneratorService,
+    private readonly overlapValidator: OverlapValidator,
   ) {}
 
   async validateBookingTimes(
@@ -29,6 +31,17 @@ export class BookingsService {
     this.pastDateValidator.validate(start);
     this.businessDayValidator.validate(start);
     this.openingHoursValidator.validate(start, end);
+  }
+
+  async checkOverlap(
+    barberId: string,
+    startTime: Date,
+    endTime: Date,
+  ): Promise<void> {
+    const barberBookings =
+      await this.bookingRepository.findByBarberId(barberId);
+
+    this.overlapValidator.validateNoOverlap(startTime, endTime, barberBookings);
   }
 
   generateDailySlots(dateStr: string): TimeSlot[] {

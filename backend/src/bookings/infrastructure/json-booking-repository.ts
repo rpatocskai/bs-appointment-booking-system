@@ -59,6 +59,11 @@ export class JsonBookingRepository implements IBookingRepository {
     return bookings.find((b) => b.id === id) || null;
   }
 
+  async findByBarberId(barberId: string): Promise<Booking[]> {
+    const bookings = await this.readData();
+    return bookings.filter((b) => b.barberId === barberId);
+  }
+
   async findByEmail(email: string): Promise<Booking[]> {
     const bookings = await this.readData();
     return bookings.filter(
