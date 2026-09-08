@@ -1,3 +1,4 @@
+// src/bookings/services/time-slot-generator.service.ts
 import { Injectable } from '@nestjs/common';
 
 export interface TimeSlot {
@@ -7,14 +8,12 @@ export interface TimeSlot {
 
 @Injectable()
 export class TimeSlotGeneratorService {
-  private readonly OPENING_HOUR = 7; // 07:00
-  private readonly CLOSING_HOUR = 20; // 20:00
+  private readonly OPENING_HOUR = 7;
+  private readonly CLOSING_HOUR = 20;
   private readonly SLOT_DURATION_MINUTES = 30;
 
   generateSlotsForDate(dateStr: string): TimeSlot[] {
     const slots: TimeSlot[] = [];
-
-    // Format has to be YYYY-MM-DD (example: '2026-09-07')
     const cleanDateStr = dateStr.split('T')[0];
 
     const startOfDay = this.createBudapestDate(
@@ -41,7 +40,6 @@ export class TimeSlotGeneratorService {
           endTime: new Date(currentEnd),
         });
       }
-
       currentStart = currentEnd;
     }
 
@@ -54,18 +52,30 @@ export class TimeSlotGeneratorService {
     minute: number,
   ): Date {
     const pad = (num: number) => String(num).padStart(2, '0');
-    const isoStringWithoutZone = `${dateStr}T${pad(hour)}:${pad(minute)}:00`;
-    const targetDate = new Date(`${isoStringWithoutZone}Z`);
-    const tzOffset = this.getBudapestOffset(targetDate);
+    const localIso = `${dateStr}T${pad(hour)}:${pad(minute)}:00`;
+    const targetDate = new Date(`${localIso}Z`);
 
-    return new Date(targetDate.getTime() - tzOffset);
-  }
-
-  private getBudapestOffset(date: Date): number {
-    const tzString = date.toLocaleString('en-US', {
+    const formatter = new Intl.DateTimeFormat('en-US', {
       timeZone: 'Europe/Budapest',
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
     });
-    const localDate = new Date(tzString);
-    return localDate.getTime() - date.getTime();
+
+    const gmtParts = formatter.formatToParts(targetDate);
+    const gmtHour = parseInt(
+      gmtParts.find((p) => p.type === 'hour')?.value || '0',
+      10,
+    );
+
+    let offset = gmtHour - hour;
+    if (offset < -12) offset += 24;
+    if (offset > 12) offset -= 24;
+
+    return new Date(targetDate.getTime() - offset * 60 * 60 * 1000);
   }
 }
