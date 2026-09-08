@@ -1,75 +1,99 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { BookingPage } from "./BookingPage";
-import { barbersApi } from "../features/barbers/services/barbersApi";
+import { useBarbers } from "../features/barbers/hooks/useBarber";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { Barber } from "../features/barbers/types/barber.types";
 
-// Mock data
-const mockApiBarbers = [
-  {
-    id: "b-1",
-    name: "Kovács János",
+vi.mock("../features/barbers/hooks/useBarber");
+
+vi.mock("../features/barbers/components/BarberSelector", () => ({
+  BarberSelector: ({
+    barbers,
+    onSelectBarber,
+  }: {
+    barbers: Barber[];
+    selectedBarberId?: string;
+    onSelectBarber: (barber: Barber) => void;
+  }) => (
+    <div data-testid="barber-selector">
+      {barbers.map((b) => (
+        <button key={b.id} onClick={() => onSelectBarber(b)}>
+          Select Barber {b.name}
+        </button>
+      ))}
+    </div>
+  ),
+}));
+
+vi.mock("../features/bookings/components/DateTimeSelector", () => ({
+  DateTimeSelector: () => (
+    <div data-testid="datetime-selector">Date Time Selector</div>
+  ),
+}));
+
+describe("BookingPage Komponens", () => {
+  const mockBarber: Barber = {
+    id: "b1",
+    name: "Gedeon",
     workSchedule: {
-      monday: { start: "08:00", end: "16:00" },
-      saturday: { start: "09:00", end: "14:00" },
+      monday: { start: "07:00", end: "20:00" },
+      tuesday: { start: "07:00", end: "20:00" },
     },
-  },
-];
+  };
 
-describe("BookingPage Integrációs Teszt", () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
-  it("mutatja a töltőképernyőt, majd a sikeres API hívás után kilistázza a borbélyokat és kezeli a kijelölést", async () => {
-    // 1. Fishing api call, and force to mock data usage
-    const apiMock = vi
-      .spyOn(barbersApi, "getAll")
-      .mockResolvedValue(mockApiBarbers);
+  it("meg kell jelenítenie a betöltési indikátort, ha isLoading true", () => {
+    vi.mocked(useBarbers).mockReturnValue({
+      barbers: [],
+      isLoading: true,
+      error: null,
+    });
 
-    // 2. Render all page
     render(<BookingPage />);
-
-    // 3. Check cirgularprogress (loading animation)
-    // MUI CircularProgress get 'progressbar' role
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
-
-    // 4. Check loading animation diappear
-    await waitFor(() => {
-      expect(screen.queryByRole("progressbar")).toBeNull();
-    });
-
-    // Check barber name display
-    expect(screen.getByText("Kovács János")).toBeInTheDocument();
-
-    // 5. Test all of the flow
-    const selectButton = screen.getByRole("button", {
-      name: /borbély kiválasztása/i,
-    });
-    await userEvent.click(selectButton);
-
-    // 6. Button text must be change to 'Kiválasztva'
-    expect(
-      screen.getByRole("button", { name: /kiválasztva/i }),
-    ).toBeInTheDocument();
-
-    expect(apiMock).toHaveBeenCalledTimes(1);
   });
 
-  it("megjeleníti a hibaüzenetet a képernyőn, ha az API hívás elbukik", async () => {
-    // Check api error
-    vi.spyOn(barbersApi, "getAll").mockRejectedValue(
-      new Error("Hálózati hiba"),
-    );
+  it("meg kell jelenítenie a hibaüzenetet, ha hiba történik", () => {
+    vi.mocked(useBarbers).mockReturnValue({
+      barbers: [],
+      isLoading: false,
+      error: "Hiba a borbélyok betöltésekor",
+    });
+
+    render(<BookingPage />);
+    expect(
+      screen.getByText("Hiba a borbélyok betöltésekor"),
+    ).toBeInTheDocument();
+  });
+
+  it("sikeresen ki kell renderelnie a borbélyválasztót, ha sikeres az adatletöltés", () => {
+    vi.mocked(useBarbers).mockReturnValue({
+      barbers: [mockBarber],
+      isLoading: false,
+      error: null,
+    });
+
+    render(<BookingPage />);
+    expect(screen.getByTestId("barber-selector")).toBeInTheDocument();
+    expect(screen.queryByTestId("datetime-selector")).not.toBeInTheDocument();
+  });
+
+  it("borbély kiválasztásakor meg kell jelennie a popupnak (naptárnak)", async () => {
+    vi.mocked(useBarbers).mockReturnValue({
+      barbers: [mockBarber],
+      isLoading: false,
+      error: null,
+    });
 
     render(<BookingPage />);
 
-    // Wait to loading end
-    await waitFor(() => {
-      expect(screen.queryByRole("progressbar")).toBeNull();
-    });
+    expect(screen.queryByTestId("datetime-selector")).not.toBeInTheDocument();
 
-    // Check error message
-    expect(screen.getByText("Hálózati hiba")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("Select Barber Gedeon"));
+
+    expect(screen.getByTestId("datetime-selector")).toBeInTheDocument();
   });
 });
