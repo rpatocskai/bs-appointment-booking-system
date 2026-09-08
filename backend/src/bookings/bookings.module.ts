@@ -4,6 +4,7 @@ import { BookingsService } from './services/bookings.service.js';
 import { JsonBookingRepository } from './infrastructure/json-booking-repository.js';
 import { OpeningHoursValidator } from './validators/opening-hours.validator.js';
 import { BusinessDayValidator } from './validators/business-day.validator.js';
+import { PastDateValidator } from './validators/past-date.validator.js';
 
 @Module({
   controllers: [BookingsController],
@@ -11,6 +12,7 @@ import { BusinessDayValidator } from './validators/business-day.validator.js';
     BookingsService,
     OpeningHoursValidator,
     BusinessDayValidator,
+    PastDateValidator,
     { provide: 'IBookingRepository', useClass: JsonBookingRepository },
   ],
   exports: [BookingsService],
