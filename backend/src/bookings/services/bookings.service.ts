@@ -9,6 +9,9 @@ import {
 } from './time-slot-generator.service.js';
 import { OverlapValidator } from '../validators/overlap.validator.js';
 import { AvailabilityDto } from '../dtos/availability.dto.js';
+import { Booking } from '../domains/booking.entity.js';
+import { randomUUID } from 'crypto';
+import { CreateBookingDto } from '../dtos/create-booking.dto.js';
 
 @Injectable()
 export class BookingsService {
@@ -72,5 +75,36 @@ export class BookingsService {
 
       return !isOverlapping;
     });
+  }
+
+  async createBooking(dto: CreateBookingDto): Promise<Booking> {
+    const start = new Date(dto.startTime);
+    const end = new Date(dto.endTime);
+
+    this.pastDateValidator.validate(start);
+
+    this.businessDayValidator.validate(start);
+
+    this.openingHoursValidator.validate(start, end);
+
+    const barberBookings = await this.bookingRepository.findByBarberId(
+      dto.barberId,
+    );
+    this.overlapValidator.validateNoOverlap(start, end, barberBookings);
+
+    const newBooking = new Booking({
+      id: randomUUID(),
+      barberId: dto.barberId,
+      customerEmail: dto.customerEmail,
+      startTime: start,
+      endTime: end,
+      createdAt: new Date(),
+    });
+
+    return this.bookingRepository.save(newBooking);
+  }
+
+  async deleteAllBookings(): Promise<void> {
+    await this.bookingRepository.deleteAll();
   }
 }
