@@ -1,4 +1,9 @@
-import { Injectable, Inject } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import * as bookingRepositoryInterface from '../domains/booking.repository.interface.js';
 import { BusinessDayValidator } from '../validators/business-day.validator.js';
 import { OpeningHoursValidator } from '../validators/opening-hours.validator.js';
@@ -102,6 +107,27 @@ export class BookingsService {
     });
 
     return this.bookingRepository.save(newBooking);
+  }
+
+  async getBookingsByEmail(email: string): Promise<Booking[]> {
+    if (!email) {
+      throw new BadRequestException('Az e-mail cím megadása kötelező');
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new BadRequestException('Érvénytelen e-mail cím formátum');
+    }
+
+    return this.bookingRepository.findByEmail(email);
+  }
+
+  async deleteBooking(id: string): Promise<void> {
+    const isDeleted = await this.bookingRepository.delete(id);
+    if (!isDeleted) {
+      throw new NotFoundException(
+        `A megadott azonosítóval (${id}) nem található foglalás`,
+      );
+    }
   }
 
   async deleteAllBookings(): Promise<void> {
