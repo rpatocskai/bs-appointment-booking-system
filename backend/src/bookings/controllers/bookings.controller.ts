@@ -1,23 +1,21 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
-  HttpCode,
-  HttpStatus,
   Post,
+  Delete,
   Query,
-  UseGuards,
+  Param,
+  Body,
   UsePipes,
   ValidationPipe,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { BookingsService } from '../services/bookings.service.js';
 import { AvailabilityDto } from '../dtos/availability.dto.js';
-import { ApiKeyGuard } from '../../common/guards/api-key.guard.js';
 import { CreateBookingDto } from '../dtos/create-booking.dto.js';
 
 @Controller('bookings')
-@UseGuards(ApiKeyGuard)
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
@@ -31,6 +29,17 @@ export class BookingsController {
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   async createBooking(@Body() createBookingDto: CreateBookingDto) {
     return this.bookingsService.createBooking(createBookingDto);
+  }
+
+  @Get()
+  async getBookingsByEmail(@Query('email') email: string) {
+    return this.bookingsService.getBookingsByEmail(email);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteBooking(@Param('id') id: string) {
+    await this.bookingsService.deleteBooking(id);
   }
 
   @Delete()

@@ -1,6 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { BadRequestException, ConflictException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { beforeEach, describe, it, expect, vi, afterEach } from 'vitest';
 import { BookingsService } from './bookings.service.js';
 import { Booking } from '../domains/booking.entity.js';
@@ -16,8 +20,10 @@ describe('BookingsService', () => {
 
   const mockBookingRepository = {
     findByBarberId: vi.fn(),
+    findByEmail: vi.fn(),
     save: vi.fn(),
     deleteAll: vi.fn(),
+    delete: vi.fn(),
   };
 
   const mockBusinessDayValidator = { validate: vi.fn() };
@@ -32,6 +38,8 @@ describe('BookingsService', () => {
     vi.mocked(mockOpeningHoursValidator.validate).mockReset();
     vi.mocked(mockPastDateValidator.validate).mockReset();
     vi.mocked(mockOverlapValidator.validateNoOverlap).mockReset();
+    vi.mocked(mockBookingRepository.findByEmail).mockReset();
+    vi.mocked(mockBookingRepository.delete).mockReset();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -170,6 +178,59 @@ describe('BookingsService', () => {
       await service.deleteAllBookings();
 
       expect(mockBookingRepository.deleteAll).toHaveBeenCalled();
+    });
+  });
+  describe('getBookingsByEmail', () => {
+    it('sikeresen vissza kell adnia a foglalások tömbjét érvényes e-mail cím esetén', async () => {
+      const mockBookings: Booking[] = [
+        new Booking({
+          id: 'b1',
+          customerEmail: 'vendegh@email.hu',
+          barberId: 'barber-1',
+        }),
+      ];
+      mockBookingRepository.findByEmail.mockResolvedValue(mockBookings);
+
+      const result = await service.getBookingsByEmail('vendegh@email.hu');
+
+      expect(mockBookingRepository.findByEmail).toHaveBeenCalledWith(
+        'vendegh@email.hu',
+      );
+      expect(result).toEqual(mockBookings);
+    });
+
+    it('BadRequestException-t kell dobnia, ha az e-mail cím üres string', async () => {
+      await expect(service.getBookingsByEmail('')).rejects.toThrow(
+        'Az e-mail cím megadása kötelező',
+      );
+      expect(mockBookingRepository.findByEmail).not.toHaveBeenCalled();
+    });
+
+    it('BadRequestException-t kell dobnia, ha az e-mail cím formátuma érvénytelen', async () => {
+      await expect(
+        service.getBookingsByEmail('hibas-email-formatum'),
+      ).rejects.toThrow('Érvénytelen e-mail cím formátum');
+      expect(mockBookingRepository.findByEmail).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('deleteBooking', () => {
+    it('sikeresen törölnie kell a foglalást, ha az azonosító létezik', async () => {
+      mockBookingRepository.delete.mockResolvedValue(true);
+
+      await expect(service.deleteBooking('b1')).resolves.not.toThrow();
+      expect(mockBookingRepository.delete).toHaveBeenCalledWith('b1');
+    });
+
+    it('NotFoundException-t kell dobnia, ha az azonosító nem található a rendszerben', async () => {
+      mockBookingRepository.delete.mockResolvedValue(false);
+
+      await expect(service.deleteBooking('nem-letezo-id')).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(mockBookingRepository.delete).toHaveBeenCalledWith(
+        'nem-letezo-id',
+      );
     });
   });
 });
