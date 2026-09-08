@@ -5,11 +5,13 @@ import { JsonBookingRepository } from './infrastructure/json-booking-repository.
 import { OpeningHoursValidator } from './validators/opening-hours.validator.js';
 import { BusinessDayValidator } from './validators/business-day.validator.js';
 import { PastDateValidator } from './validators/past-date.validator.js';
+import { TimeSlotGeneratorService } from './services/time-slot-generator.service.js';
 
 @Module({
   controllers: [BookingsController],
   providers: [
     BookingsService,
+    TimeSlotGeneratorService,
     OpeningHoursValidator,
     BusinessDayValidator,
     PastDateValidator,
