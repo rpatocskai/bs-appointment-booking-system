@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "b1a2c3d4-1111-4000-8000-111111111111",
+    "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
+    "customerEmail": "teszt.elek@example.com",
+    "startTime": "2026-09-08T10:00:00.000Z",
+    "endTime": "2026-09-08T10:30:00.000Z",
+    "createdAt": "2026-09-01T08:00:00.000Z"
+  },
+  {
+    "id": "b2a3c4d5-2222-4000-8000-222222222222",
+    "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
+    "customerEmail": "gipsz.jakab@example.com",
+    "startTime": "2026-09-08T14:30:00.000Z",
+    "endTime": "2026-09-08T15:00:00.000Z",
+    "createdAt": "2026-09-02T09:15:00.000Z"
+  },
+  {
+    "id": "b3a4c5d6-3333-4000-8000-333333333333",
+    "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
+    "customerEmail": "kovacs.péter@example.com",
+    "startTime": "2026-09-09T09:00:00.000Z",
+    "endTime": "2026-09-09T09:30:00.000Z",
+    "createdAt": "2026-09-03T11:20:00.000Z"
+  }
+]
