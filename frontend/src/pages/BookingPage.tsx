@@ -12,7 +12,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { BarberSelector } from "../features/barbers/components/BarberSelector";
 import { DateTimeSelector } from "../features/bookings/components/DateTimeSelector";
-// TODO import { BookingForm } from "../features/bookings/components/BookingForm";
+import { BookingForm } from "../features/bookings/components/BookingForm";
 import { useBarbers } from "../features/barbers/hooks/useBarber";
 import type { Barber } from "../features/barbers/types/barber.types";
 import type { TimeSlot } from "../features/bookings/types/booking.types";
@@ -27,8 +27,8 @@ export const BookingPage = () => {
   );
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
 
-  /* TODO const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null); */
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const { barbers, isLoading, error } = useBarbers();
 
@@ -40,7 +40,7 @@ export const BookingPage = () => {
   const handleClosePopup = () => {
     setSelectedBarberId(undefined);
     setSelectedSlot(null);
-    //TODO setSubmitError(null);
+    setSubmitError(null);
   };
 
   const handleDateChange = (date: string) => {
@@ -52,7 +52,7 @@ export const BookingPage = () => {
     setSelectedSlot(slot);
   };
 
-  /* TODO  const handleBookingSubmit = async (email: string) => {
+  const handleBookingSubmit = async (email: string) => {
     if (!selectedBarberId || !selectedSlot) return;
 
     setIsSubmitting(true);
@@ -71,7 +71,7 @@ export const BookingPage = () => {
     } finally {
       setIsSubmitting(false);
     }
-  }; */
+  };
 
   const selectedBarber = (barbers as Barber[]).find(
     (b) => b.id === selectedBarberId,
@@ -124,7 +124,6 @@ export const BookingPage = () => {
           maxWidth="md"
           fullWidth
           scroll="body"
-          // MUI v9 kompatibilis slotProps a PaperProps helyett
           slotProps={{
             paper: {
               sx: {
@@ -167,15 +166,14 @@ export const BookingPage = () => {
                 {selectedSlot && (
                   <Box sx={{ mt: 2 }}>
                     <Divider sx={{ my: 4, borderColor: "#E8E2D5" }} />
-                    init
-                    {/*  <BookingForm
+                    <BookingForm
                       barberName={selectedBarber.name}
                       selectedDate={selectedDate}
                       selectedSlot={selectedSlot}
                       onSubmit={handleBookingSubmit}
                       isSubmitting={isSubmitting}
                       submitError={submitError}
-                    /> */}
+                    />
                   </Box>
                 )}
               </>
