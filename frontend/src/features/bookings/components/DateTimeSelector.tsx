@@ -101,12 +101,10 @@ export const DateTimeSelector = ({
                 fullWidth
                 value={selectedDate}
                 onChange={(e) => onDateChange(e.target.value)}
-                // MUI v9 tökéletesen típusbiztos slotProps elosztása
                 slotProps={{
                   inputLabel: { shrink: true },
                   htmlInput: {
-                    min: new Date().toISOString().split("T")[0], // A natív HTML input attribútumok helye
-                    // Amikor belekattintanak vagy ráfókuszálnak, azonnal megnyitjuk a gyári naptár panelt
+                    min: new Date().toISOString().split("T")[0],
                     onClick: (e: React.MouseEvent<HTMLInputElement>) => {
                       try {
                         e.currentTarget.showPicker();
@@ -132,8 +130,8 @@ export const DateTimeSelector = ({
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     bgcolor: "#ffffff",
-                    cursor: "pointer", // Vizuális visszajelzés, hogy az egész mező kattintható
-                    "& input": { cursor: "pointer" }, // Az input szövegre is rákényszerítjük a mutatót
+                    cursor: "pointer",
+                    "& input": { cursor: "pointer" },
                     "& fieldset": { borderColor: "#cbd5e1" },
                     "&:hover fieldset": { borderColor: "#2b1c11" },
                     "&.Mui-focused fieldset": { borderColor: "#2b1c11" },

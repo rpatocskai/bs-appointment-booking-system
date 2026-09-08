@@ -40,10 +40,8 @@ export const BookingPage = () => {
 
   const { barbers, isLoading, error } = useBarbers();
 
-  // Agresszív és golyóálló felgördülés a siker-képernyő tetejére
   useEffect(() => {
     if (isSuccess) {
-      // 1. Megkeressük a Dialog összes létező belső konténerét és felpörgetjük őket
       const dialogScrollContainers = document.querySelectorAll(
         ".MuiDialog-container, .MuiDialog-paper, .MuiDialogContent-root",
       );
@@ -53,10 +51,9 @@ export const BookingPage = () => {
           top: 0,
           behavior: "smooth",
         });
-        container.scrollTop = 0; // Biztonsági fallback
+        container.scrollTop = 0;
       });
 
-      // 2. Felküldjük a teljes külső HTML dokumentumot és ablakot is
       window.scrollTo({
         top: 0,
         behavior: "smooth",

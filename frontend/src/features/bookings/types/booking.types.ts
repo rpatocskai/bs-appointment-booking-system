@@ -11,6 +11,6 @@ export interface AvailabilityQueryParams {
 export interface CreateBookingPayload {
   barberId: string;
   customerEmail: string;
-  startTime: string; // ISO String
-  endTime: string; // ISO String
+  startTime: string;
+  endTime: string;
 }
