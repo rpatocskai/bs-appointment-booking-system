@@ -8,6 +8,7 @@ import {
   TimeSlotGeneratorService,
 } from './time-slot-generator.service.js';
 import { OverlapValidator } from '../validators/overlap.validator.js';
+import { AvailabilityDto } from '../dtos/availability.dto.js';
 
 @Injectable()
 export class BookingsService {
@@ -46,5 +47,30 @@ export class BookingsService {
 
   generateDailySlots(dateStr: string): TimeSlot[] {
     return this.timeSlotGenerator.generateSlotsForDate(dateStr);
+  }
+
+  async getAvailability(dto: AvailabilityDto): Promise<TimeSlot[]> {
+    const targetDate = new Date(dto.date);
+
+    this.businessDayValidator.validate(targetDate);
+
+    const allSlots = this.timeSlotGenerator.generateSlotsForDate(dto.date);
+    const barberBookings = await this.bookingRepository.findByBarberId(
+      dto.barberId,
+    );
+
+    const now = new Date();
+
+    return allSlots.filter((slot) => {
+      if (slot.startTime < now) {
+        return false;
+      }
+
+      const isOverlapping = barberBookings.some((booking) =>
+        booking.overlapsWith(slot.startTime, slot.endTime),
+      );
+
+      return !isOverlapping;
+    });
   }
 }
