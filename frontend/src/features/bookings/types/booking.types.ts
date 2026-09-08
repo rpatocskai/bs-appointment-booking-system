@@ -14,3 +14,12 @@ export interface CreateBookingPayload {
   startTime: string;
   endTime: string;
 }
+
+export interface UserBooking {
+  id: string;
+  barberId: string;
+  customerEmail: string;
+  startTime: string; // ISO string
+  endTime: string; // ISO string
+  createdAt: string;
+}

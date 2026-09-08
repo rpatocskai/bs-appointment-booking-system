@@ -9,9 +9,13 @@ import {
   IconButton,
   Divider,
   Button,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
 import { BarberSelector } from "../features/barbers/components/BarberSelector";
 import { DateTimeSelector } from "../features/bookings/components/DateTimeSelector";
 import { BookingForm } from "../features/bookings/components/BookingForm";
@@ -20,8 +24,11 @@ import { useBarbers } from "../features/barbers/hooks/useBarber";
 import type { Barber } from "../features/barbers/types/barber.types";
 import type { TimeSlot } from "../features/bookings/types/booking.types";
 import axios from "axios";
+import { MyBookings } from "./MyBookings";
 
 export const BookingPage = () => {
+  const [activeTab, setActiveTab] = useState(0);
+
   const [selectedBarberId, setSelectedBarberId] = useState<string | undefined>(
     undefined,
   );
@@ -37,7 +44,6 @@ export const BookingPage = () => {
   const [savedEmail, setSavedEmail] = useState("");
 
   const successRef = useRef<HTMLDivElement>(null);
-
   const { barbers, isLoading, error } = useBarbers();
 
   useEffect(() => {
@@ -45,28 +51,18 @@ export const BookingPage = () => {
       const dialogScrollContainers = document.querySelectorAll(
         ".MuiDialog-container, .MuiDialog-paper, .MuiDialogContent-root",
       );
-
       dialogScrollContainers.forEach((container) => {
-        container.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
+        container.scrollTo({ top: 0, behavior: "smooth" });
         container.scrollTop = 0;
       });
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-
-      if (document.documentElement) {
-        document.documentElement.scrollTop = 0;
-      }
-      if (document.body) {
-        document.body.scrollTop = 0;
-      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [isSuccess]);
+
+  const handleTabChange = (_e: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+    handleClosePopup();
+  };
 
   const handleSelectBarber = (barber: Barber) => {
     setSelectedBarberId(barber.id);
@@ -110,9 +106,7 @@ export const BookingPage = () => {
         setSubmitError(err.response.data.message);
       } else {
         setSubmitError(
-          err instanceof Error
-            ? err.message
-            : "Sikertelen foglalás. Az időpont időközben betelt.",
+          err instanceof Error ? err.message : "Sikertelen foglalás.",
         );
       }
     } finally {
@@ -160,20 +154,68 @@ export const BookingPage = () => {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box
         sx={{
+          borderBottom: 1,
+          borderColor: "#E8E2D5",
+          mb: 4,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          textColor="inherit"
+          slotProps={{
+            indicator: {
+              sx: { bgcolor: "#3D2314", height: 3 },
+            },
+          }}
+          sx={{
+            "& .MuiTab-root": {
+              fontFamily: "serif",
+              fontWeight: "bold",
+              fontSize: "1.05rem",
+              color: "#8C6D58",
+              textTransform: "none",
+              px: 4,
+              py: 2,
+              "&.Mui-selected": { color: "#3D2314" },
+            },
+          }}
+        >
+          <Tab
+            icon={<CalendarMonthIcon sx={{ mr: 1 }} />}
+            iconPosition="start"
+            label="Új Időpont Foglalása"
+          />
+          <Tab
+            icon={<ContentPasteSearchIcon sx={{ mr: 1 }} />}
+            iconPosition="start"
+            label="Foglalásaim Kezelése"
+          />
+        </Tabs>
+      </Box>
+
+      <Box
+        sx={{
           backgroundColor: "#FDFBF7",
           p: { xs: 2, md: 4 },
           borderRadius: "24px",
           border: "1px solid #E8E2D5",
         }}
       >
-        <BarberSelector
-          barbers={barbers as Barber[]}
-          selectedBarberId={selectedBarberId}
-          onSelectBarber={handleSelectBarber}
-        />
+        {activeTab === 0 && (
+          <BarberSelector
+            barbers={barbers as Barber[]}
+            selectedBarberId={selectedBarberId}
+            onSelectBarber={handleSelectBarber}
+          />
+        )}
+
+        {activeTab === 1 && <MyBookings barbers={barbers as Barber[]} />}
 
         <Dialog
-          open={Boolean(selectedBarberId && selectedBarber)}
+          open={Boolean(activeTab === 0 && selectedBarberId && selectedBarber)}
           onClose={handleClosePopup}
           maxWidth="md"
           fullWidth
