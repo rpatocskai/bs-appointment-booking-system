@@ -1,1 +1,66 @@
-[]
+[
+  {
+    "id": "c953e049-430a-49bb-9e37-b17844cca5ce",
+    "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
+    "customerEmail": "test@test.hu",
+    "startTime": "2026-09-09T07:00:00.000Z",
+    "endTime": "2026-09-09T07:30:00.000Z",
+    "createdAt": "2026-09-08T19:26:29.769Z"
+  },
+  {
+    "id": "545bd5a6-e503-4165-a3b2-113c1521c4ac",
+    "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
+    "customerEmail": "test@test.hu",
+    "startTime": "2026-09-09T07:30:00.000Z",
+    "endTime": "2026-09-09T08:00:00.000Z",
+    "createdAt": "2026-09-08T19:27:13.177Z"
+  },
+  {
+    "id": "bf6ee9c1-20e7-49bb-a2b7-cd22be79a5c3",
+    "barberId": "a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d",
+    "customerEmail": "rpatocskai.developer@gmail.com",
+    "startTime": "2026-09-09T05:00:00.000Z",
+    "endTime": "2026-09-09T05:30:00.000Z",
+    "createdAt": "2026-09-08T19:29:38.864Z"
+  },
+  {
+    "id": "b5a9ee21-945e-4c70-8079-d509afab0ce0",
+    "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
+    "customerEmail": "rpatocskai.developer@gmail.com",
+    "startTime": "2026-09-09T05:00:00.000Z",
+    "endTime": "2026-09-09T05:30:00.000Z",
+    "createdAt": "2026-09-08T19:31:32.855Z"
+  },
+  {
+    "id": "4e85a7d0-ec06-4332-9708-793a67230ad6",
+    "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
+    "customerEmail": "rpatocskai.developer@gmail.com",
+    "startTime": "2026-09-09T05:30:00.000Z",
+    "endTime": "2026-09-09T06:00:00.000Z",
+    "createdAt": "2026-09-08T19:33:27.108Z"
+  },
+  {
+    "id": "0d9b35aa-28c3-4be1-9a85-883a697eede6",
+    "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
+    "customerEmail": "rpatocskai.developer@gmail.com",
+    "startTime": "2026-09-09T17:30:00.000Z",
+    "endTime": "2026-09-09T18:00:00.000Z",
+    "createdAt": "2026-09-08T19:33:35.231Z"
+  },
+  {
+    "id": "34e6fd1f-15d1-462e-a3fb-177ed7138dda",
+    "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
+    "customerEmail": "rpatocskai.developer@gmail.com",
+    "startTime": "2026-10-06T07:00:00.000Z",
+    "endTime": "2026-10-06T07:30:00.000Z",
+    "createdAt": "2026-09-08T19:36:34.269Z"
+  },
+  {
+    "id": "70d3a1b3-ed71-4f89-93c4-b65ee635517c",
+    "barberId": "a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d",
+    "customerEmail": "rpatocskai.developer@gmail.com",
+    "startTime": "2026-10-06T05:00:00.000Z",
+    "endTime": "2026-10-06T05:30:00.000Z",
+    "createdAt": "2026-09-08T19:37:25.055Z"
+  }
+]

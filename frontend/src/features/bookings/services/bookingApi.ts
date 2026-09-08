@@ -1,5 +1,9 @@
 import { apiClient } from "../../../api/clients";
-import type { AvailabilityQueryParams, TimeSlot } from "../types/booking.types";
+import type {
+  AvailabilityQueryParams,
+  CreateBookingPayload,
+  TimeSlot,
+} from "../types/booking.types";
 
 export const bookingsApi = {
   getAvailability: async (
@@ -8,6 +12,11 @@ export const bookingsApi = {
     const response = await apiClient.get<TimeSlot[]>("/bookings/availability", {
       params,
     });
+    return response.data;
+  },
+
+  createBooking: async (payload: CreateBookingPayload): Promise<unknown> => {
+    const response = await apiClient.post<unknown>("/bookings", payload);
     return response.data;
   },
 };
