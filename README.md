@@ -9,7 +9,6 @@ Ez egy teljes körű, modern online időpontfoglaló rendszer helyi borbélyüzl
 ## Tech Stack (Technológiai Stack)
 
 ### Backend
-
 - **Framework:** NestJS (Node.js)
 - **Language:** TypeScript
 - **Adatperzisztencia:** Filestore (JSON-alapú aszinkron tranzakciós fájlkezelés az egyszerűség és gyorsaság érdekében)
@@ -17,7 +16,6 @@ Ez egy teljes körű, modern online időpontfoglaló rendszer helyi borbélyüzl
 - **Tesztelés:** Vitest (Villámgyors, modern tesztkörnyezet és lefedettség-számítás)
 
 ### Frontend
-
 - **Framework:** React 19 / Vite
 - **Language:** TypeScript
 - **UI Library:** Material UI (MUI v9 - a legújabb CSS Grid-alapú komponensrendszerrel)
@@ -31,7 +29,6 @@ Ez egy teljes körű, modern online időpontfoglaló rendszer helyi borbélyüzl
 A rendszer a **Domain-Driven Design (DDD)** és a **Clean Architecture** elveit követi a maximális tesztelhetőség és a laza kapcsolódás (Loose Coupling) érdekében:
 
 ### Kulcsfontosságú Tervezési Minták:
-
 - **Dependency Inversion (SOLID):** A `BookingsService` egy `IBookingRepository` interfészre támaszkodik, nem pedig a konkrét fájlrendszerre, így az adatbáziscsere (pl. PostgreSQL-re) a service módosítása nélkül elvégezhető.
 - **Rich Domain Model:** Az időpontok matematikai átfedésének számítása közvetlenül a `Booking` entitás belső üzleti logikájában (`overlapsWith`) lakik, nem pedig anémikus (funkció nélküli) adatosztályokban.
 
@@ -40,12 +37,10 @@ A rendszer a **Domain-Driven Design (DDD)** és a **Clean Architecture** elveit 
 ## Getting Started (Beüzemelés)
 
 ### Előfeltételek
-
 - Node.js (v18 vagy újabb ajánlott)
 - npm vagy yarn
 
 ### Backend Beüzemelés
-
 1. Navigálj a backend mappába:
    ```bash
    cd backend
@@ -58,10 +53,9 @@ A rendszer a **Domain-Driven Design (DDD)** és a **Clean Architecture** elveit 
    ```bash
    npm run start:dev
    ```
-   _A szerver alapértelmezetten a `http://localhost:3000` címen fog futni._
+   *A szerver alapértelmezetten a `http://localhost:3000` címen fog futni.*
 
 ### Frontend Beüzemelés
-
 1. Navigálj a frontend mappába:
    ```bash
    cd frontend
@@ -74,20 +68,19 @@ A rendszer a **Domain-Driven Design (DDD)** és a **Clean Architecture** elveit 
    ```bash
    npm run dev
    ```
-   _A kliens alkalmazás alapértelmezetten a `http://localhost:5173` címen nyílik meg._
+   *A kliens alkalmazás alapértelmezetten a `http://localhost:5173` címen nyílik meg.*
 
 ---
 
 ## Environment Variables (Környezeti Változók)
 
 ### Frontend (`frontend/.env`)
-
 ```env
 VITE_API_URL=http://localhost:3000
 VITE_APP_API_KEY=my-super-secret-backend-key-123
 ```
-### Backend (`backend/.env`)
 
+### Backend (`backend/.env`)
 ```env
 PORT=3000
 BARBER_API_URL=https://barber-hono-on-vercel.vercel.app/api/v1
@@ -105,19 +98,20 @@ FRONTEND_URL=http://localhost:5173
 
 Minden végpont szigorú **X-API-Key header alapú autentikáció** alatt áll.
 
-- `GET /api/v1/barbers` - Borbélyok listázása és beosztása.
-- `GET /bookings/availability?barberId=...&date=...` - Elérhető 30 perces szabad idősávok lekérdezése egy adott napra.
-- `POST /bookings` - Új időpontfoglalás létrehozása.
-- `DELETE /bookings` - **[Hard Reset]** Összes foglalás törlése a rendszerből (Minden felhasználó adatát üríti).
+- `GET /api/v1/barbers` - Borbélyok listázása és külső API integrációból származó beosztása.
+- `GET /bookings/availability?barberId=...&date=...` - Elérhető 30 perces szabad idősávok lekérdezése egy adott napra (Magyar időzóna szerint korrigálva).
+- `POST /bookings` - Új időpontfoglalás létrehozása szigorú backend-oldali üzleti validációval.
+- `GET /bookings?email=...` - **[ÚJ]** Egy adott vendég összes saját foglalásának lekérdezése e-mail cím alapján (Típusbiztos formátum-ellenőrzéssel védett).
+- `DELETE /bookings/:id` - **[ÚJ]** Egy konkrét időpontfoglalás törlése egyedi azonosító alapján (404-es hibaág ellenőrzéssel).
+- `DELETE /bookings` - **[Hard Reset]** Összes létező foglalás törlése a rendszerből (Minden felhasználó adatát üríti).
 
 ---
 
 ## Business Rules & Edge Cases (Üzleti Szabályok)
 
 A backend és frontend rétegek a következő edge case-eket és szabályokat érvényesítik szigorúan, időzóna-biztos módon:
-
 - **Nyitvatartási Idő:** Foglalások csak `07:00` és `20:00` között engedélyezettek.
-- **Munkanapok:** Hétfőtől szombatig tart nyitva a szalon, vasárnap és a hivatalos magyar munkaszüneti napokon a foglalás le van tiltva.
+- **Munkanapok:** Hétfőtől szombatig tart nyitva a szalon, vasárnap és a hivatalos magyar munkaszüneti napokon (pl. augusztus 20.) a foglalás le van tiltva.
 - **Múltbeli Időpontok:** Múltbeli dátumra vagy órára visszamenőleg nem lehet időpontot rögzíteni.
 - **Átfedés Megakadályozása (Race Condition):** Ugyanazon borbélyhoz nem rendelhető átfedő vagy egybeeső időpont. A JSON perzisztencia aszinkron írási sorral (Promise Chain) védett az egyidejű mentések adatvesztése ellen.
 
@@ -125,10 +119,9 @@ A backend és frontend rétegek a következő edge case-eket és szabályokat é
 
 ## Testing (Tesztelés)
 
-A projekt kiemelkedő, **közel 100%-os unit és integrációs tesztlefedettséggel** rendelkezik, garantálva az időzóna-független és determinisztikus működést (Fake Timers és Mocking technikák használatával).
+A projekt kiemelkedő, **100%-os unit és integrációs tesztlefedettséggel** rendelkezik mindkét oldalon, garantálva az időzóna-független és determinisztikus működést (Fake Timers és szigorú Mocking/Spying technikák használatával).
 
 ### Backend Tesztek Futtatása:
-
 ```bash
 cd backend
 npm run test          # Tesztek futtatása
@@ -136,7 +129,6 @@ npm run test:coverage # Lefedettségi riport generálása
 ```
 
 ### Frontend Tesztek Futtatása:
-
 ```bash
 cd frontend
 npm run test          # Vitest tesztek indítása
@@ -148,16 +140,13 @@ npm run test:ui       # Grafikus Vitest UI megnyitása
 ## Technical Decisions (Technikai Döntések)
 
 ### Miért JSON alapú a perzisztencia?
-
-A feladat specifikációja (2.1-es pont) megengedte a lehető legegyszerűbb JSON fájlba mentést. Egy lokális tesztfeladatnál ez drasztikusan csökkenti az infrastruktúra komplexitását (nem szükséges külső Docker vagy nehéz DB engine futtatása a validáláshoz), miközben az aszinkron Node.js fájlkezeléssel és repository absztrakcióval a kód éles adatbázisra való felkészítése transzparens maradt.
+A feladat specifikációja (2.1-es pont) megengedte a legegyszerűbb JSON fájlba mentést. Egy lokális tesztfeladatnál ez drasztikusan csökkenti az infrastruktúra komplexitását (nem szükséges külső Docker vagy DB engine futtatása a validáláshoz), miközben az aszinkron Node.js fájlkezeléssel és repository absztrakcióval a kód éles adatbázisra való felkészítése transzparens maradt.
 
 ### Miért a Derived State (Származtatott Állapot) mintát használtuk a React effektekben?
-
 A React 19 és a modern ESLint szabályok szigorúan tiltják a szinkron `setState` hívásokat a `useEffect` törzsében (Cascading Renders). A hiányzó paramétereket és üres állapotokat nem effektből kényszerítjük ki, hanem a renderelés pillanatában, tiszta származtatott állapotként számoljuk ki, ami jobb memóriakezelést és villámgyors UI renderelést biztosít.
 
 ### Miért nem használtunk Redux-ot vagy Recoil-t?
-
-A foglalási rendszer állapota lokális és folyamat-vezérelt (Wizard-szerű áramlás). A globális állapotkezelők bevezetése felesleges Boilerplate kódot és komplexitást hozott volna egy ilyen letisztult, egyoldalas alkalmazásba (Overengineering elkerülése). Az atomi állapotok és az egyedi hookok tökéletesen és izoláltan kezelik az üzleti logikát.
+A foglalási rendszer állapota lokális és folyamat-vezérelt (Wizard-szerű áramlás). A globális állapotkezelők bevezetése felesleges Boilerplate kódot és komplexitást hozott volna egy ilyen letisztult alkalmazásba (Overengineering elkerülése). Az atomi állapotok és az egyedi hookok tökéletesen és izoláltan kezelik az üzleti logikát.
 
 ---
 
