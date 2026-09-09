@@ -203,7 +203,7 @@ export const BookingPage = () => {
         <Dialog
           open={Boolean(activeTab === 0 && selectedBarberId && selectedBarber)}
           onClose={handleClosePopup}
-          maxWidth="md"
+          maxWidth="sm"
           fullWidth
           scroll="body"
           slotProps={{
@@ -212,7 +212,7 @@ export const BookingPage = () => {
                 bgcolor: "#FDFBF7",
                 borderRadius: 3,
                 border: "1px solid #E8E2D5",
-                p: 2,
+                p: 1,
                 position: "relative",
               },
             },
@@ -232,7 +232,7 @@ export const BookingPage = () => {
             <CloseIcon />
           </IconButton>
 
-          <DialogContent sx={{ pt: 4 }}>
+          <DialogContent sx={{ pt: 2 }}>
             {selectedBarber &&
               (isSuccess ? (
                 <Box ref={successRef}>
