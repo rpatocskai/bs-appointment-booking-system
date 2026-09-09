@@ -6,11 +6,10 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import type { Barber } from "../../barbers/types/barber.types";
 import type { UserBooking } from "../types/booking.types";
+import { Button } from "../../../components/ui/button/Button";
 
 interface MyBookingsTableProps {
   bookings: UserBooking[];
@@ -95,17 +94,21 @@ export const MyBookingsTable = ({
               </TableCell>
               <TableCell align="center">
                 <Button
-                  variant="outlined"
-                  color="error"
-                  startIcon={<DeleteIcon />}
+                  variant="outline"
                   onClick={() => onDeleteClick(booking)}
                   sx={{
                     textTransform: "none",
                     borderRadius: 1.5,
                     fontWeight: "bold",
-                    borderColor: "#cbd5e1",
+                    py: 1,
+                    px: 2,
                     color: "#9b1c1c",
-                    "&:hover": { bgcolor: "#fdf2f2", borderColor: "#9b1c1c" },
+                    borderColor: "#e1dacb",
+                    "&:hover": {
+                      backgroundColor: "#fdf2f2",
+                      borderColor: "#9b1c1c",
+                      color: "#9b1c1c",
+                    },
                   }}
                 >
                   Lemondás

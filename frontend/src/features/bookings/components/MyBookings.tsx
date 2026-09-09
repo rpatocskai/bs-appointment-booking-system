@@ -7,15 +7,15 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
 } from "@mui/material";
 
 import axios from "axios";
-import type { Barber } from "../features/barbers/types/barber.types";
-import { MyBookingsSearchForm } from "../features/bookings/components/MyBookingsSearchForm";
-import { MyBookingsTable } from "../features/bookings/components/MyBookingsTable";
-import { bookingsApi } from "../features/bookings/services/bookingApi";
-import type { UserBooking } from "../features/bookings/types/booking.types";
+import type { Barber } from "../../barbers/types/barber.types";
+import { MyBookingsSearchForm } from "./MyBookingsSearchForm";
+import { MyBookingsTable } from "./MyBookingsTable";
+import { bookingsApi } from "../services/bookingApi";
+import type { UserBooking } from "../types/booking.types";
+import { Button } from "../../../components/ui/button/Button";
 
 interface MyBookingsProps {
   barbers: Barber[];
@@ -180,7 +180,7 @@ export const MyBookings = ({ barbers }: MyBookingsProps) => {
           <Button
             onClick={handleCancelBooking}
             disabled={deleting}
-            variant="contained"
+            variant="primary"
             color="error"
             sx={{
               borderRadius: 1.5,

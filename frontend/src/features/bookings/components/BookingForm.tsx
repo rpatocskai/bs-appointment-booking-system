@@ -3,7 +3,6 @@ import {
   Box,
   Typography,
   TextField,
-  Button,
   Card,
   CardContent,
   Alert,
@@ -11,6 +10,7 @@ import {
 import EmailIcon from "@mui/icons-material/Email";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import type { TimeSlot } from "../types/booking.types";
+import { Button } from "../../../components/ui/button/Button";
 
 interface BookingFormProps {
   barberName: string;
@@ -57,7 +57,7 @@ export const BookingForm = ({
     return true;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (validateEmail(email)) {
       onSubmit(email);
@@ -202,7 +202,7 @@ export const BookingForm = ({
             <Button
               type="submit"
               fullWidth
-              variant="contained"
+              variant="primary"
               disabled={isSubmitting}
               sx={{
                 py: 2,

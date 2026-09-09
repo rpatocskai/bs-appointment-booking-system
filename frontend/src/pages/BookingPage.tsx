@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Container,
   Box,
@@ -8,27 +8,25 @@ import {
   DialogContent,
   IconButton,
   Divider,
-  Button,
   Tabs,
   Tab,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
 import { BarberSelector } from "../features/barbers/components/BarberSelector";
 import { DateTimeSelector } from "../features/bookings/components/DateTimeSelector";
 import { BookingForm } from "../features/bookings/components/BookingForm";
+import { BookingSuccessView } from "../features/bookings/components/BookingSuccessView";
+import { MyBookings } from "../features/bookings/components/MyBookings";
 import { bookingsApi } from "../features/bookings/services/bookingApi";
 import { useBarbers } from "../features/barbers/hooks/useBarber";
 import type { Barber } from "../features/barbers/types/barber.types";
 import type { TimeSlot } from "../features/bookings/types/booking.types";
 import axios from "axios";
-import { MyBookings } from "./MyBookings";
 
 export const BookingPage = () => {
   const [activeTab, setActiveTab] = useState(0);
-
   const [selectedBarberId, setSelectedBarberId] = useState<string | undefined>(
     undefined,
   );
@@ -39,7 +37,6 @@ export const BookingPage = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-
   const [isSuccess, setIsSuccess] = useState(false);
   const [savedEmail, setSavedEmail] = useState("");
 
@@ -118,13 +115,6 @@ export const BookingPage = () => {
     (b) => b.id === selectedBarberId,
   );
 
-  const formatTime = (isoString: string): string => {
-    return new Date(isoString).toLocaleTimeString("hu-HU", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   if (isLoading) {
     return (
       <Box
@@ -165,11 +155,7 @@ export const BookingPage = () => {
           value={activeTab}
           onChange={handleTabChange}
           textColor="inherit"
-          slotProps={{
-            indicator: {
-              sx: { bgcolor: "#3D2314", height: 3 },
-            },
-          }}
+          slotProps={{ indicator: { sx: { bgcolor: "#3D2314", height: 3 } } }}
           sx={{
             "& .MuiTab-root": {
               fontFamily: "serif",
@@ -249,79 +235,14 @@ export const BookingPage = () => {
           <DialogContent sx={{ pt: 4 }}>
             {selectedBarber &&
               (isSuccess ? (
-                <Box
-                  ref={successRef}
-                  sx={{
-                    textAlign: "center",
-                    py: 5,
-                    px: 2,
-                    mx: "auto",
-                    maxWidth: 500,
-                  }}
-                >
-                  <CheckCircleIcon
-                    sx={{ fontSize: "5rem", color: "#2e7d32", mb: 2 }}
+                <Box ref={successRef}>
+                  <BookingSuccessView
+                    barberName={selectedBarber.name}
+                    selectedDate={selectedDate}
+                    selectedSlot={selectedSlot!}
+                    savedEmail={savedEmail}
+                    onClose={handleClosePopup}
                   />
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontFamily: "serif",
-                      fontWeight: "bold",
-                      color: "#2b1c11",
-                      mb: 2,
-                    }}
-                  >
-                    SIKERES FOGLALÁS!
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: "#6d5c50", mb: 4 }}>
-                    Időpontodat sikeresen rögzítettük{" "}
-                    <strong>{selectedBarber.name}</strong> naptárában.
-                  </Typography>
-
-                  <Box
-                    sx={{
-                      bgcolor: "#f1ede2",
-                      p: 3,
-                      borderRadius: 2,
-                      mb: 4,
-                      textAlign: "left",
-                      border: "1px solid #e1dacb",
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      sx={{ mb: 1, color: "#2b1c11" }}
-                    >
-                      <strong>Dátum:</strong> {selectedDate}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ mb: 1, color: "#2b1c11" }}
-                    >
-                      <strong>Időpont:</strong>{" "}
-                      {formatTime(selectedSlot!.startTime)} –{" "}
-                      {formatTime(selectedSlot!.endTime)}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: "#2b1c11" }}>
-                      <strong>Visszaigazolás küldve:</strong> {savedEmail}
-                    </Typography>
-                  </Box>
-
-                  <Button
-                    variant="contained"
-                    onClick={handleClosePopup}
-                    sx={{
-                      py: 1.5,
-                      px: 4,
-                      borderRadius: 1.5,
-                      fontWeight: "bold",
-                      bgcolor: "#2b1c11",
-                      color: "#ffffff",
-                      "&:hover": { bgcolor: "#1c120b" },
-                    }}
-                  >
-                    Bezárás
-                  </Button>
                 </Box>
               ) : (
                 <>
