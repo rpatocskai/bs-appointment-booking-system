@@ -1,0 +1,59 @@
+import { render, screen, fireEvent } from "@testing-library/react";
+import { MyBookingsTable } from "./MyBookingsTable";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { Barber } from "../../barbers/types/barber.types";
+import type { UserBooking } from "../types/booking.types";
+
+describe("MyBookingsTable Komponens (Unit)", () => {
+  const mockBarbers: Barber[] = [
+    { id: "barber-abc", name: "Pengés Péter", workSchedule: {} },
+  ];
+
+  const mockBookings: UserBooking[] = [
+    {
+      id: "booking-123",
+      barberId: "barber-abc",
+      customerEmail: "vendegh@email.hu",
+      startTime: "2026-09-09T08:00:00.000Z",
+      endTime: "2026-09-09T08:30:00.000Z",
+      createdAt: "2026-09-08T12:00:00.000Z",
+    },
+  ];
+
+  const defaultProps = {
+    bookings: mockBookings,
+    barbers: mockBarbers,
+    onDeleteClick: vi.fn(),
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("ki kell renderelnie a fejlécet és a kapott foglalási adatokat", () => {
+    render(<MyBookingsTable {...defaultProps} />);
+
+    expect(screen.getByText("Borbély")).toBeInTheDocument();
+    expect(screen.getByText("Kezdés időpontja")).toBeInTheDocument();
+    expect(screen.getByText("Pengés Péter")).toBeInTheDocument();
+    expect(screen.getByText(/2026\. 09\. 09\.? 10:00/i)).toBeInTheDocument();
+  });
+
+  it("meg kell jelenítenie az Ismeretlen Borbély feliratot, ha a barberId nem található a listában", () => {
+    const invalidBooking = [{ ...mockBookings[0], barberId: "nem-letezo-id" }];
+    render(<MyBookingsTable {...defaultProps} bookings={invalidBooking} />);
+
+    expect(screen.getByText("Ismeretlen Borbély")).toBeInTheDocument();
+  });
+
+  it("meghíváskor át kell adnia a pontos foglalási adatot az onDeleteClick callbacknek", () => {
+    render(<MyBookingsTable {...defaultProps} />);
+
+    const deleteButton = screen.getByRole("button", { name: "Lemondás" });
+    expect(deleteButton).toBeInTheDocument();
+
+    fireEvent.click(deleteButton);
+
+    expect(defaultProps.onDeleteClick).toHaveBeenCalledWith(mockBookings[0]);
+  });
+});

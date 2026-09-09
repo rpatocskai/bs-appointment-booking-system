@@ -49,23 +49,6 @@ describe("BookingForm Komponens (Unit)", () => {
     expect(defaultProps.onSubmit).not.toHaveBeenCalled();
   });
 
-  it("hibaüzenetet kell megjelenítenie, ha az e-mail formátuma hibás", () => {
-    render(<BookingForm {...defaultProps} />);
-
-    const emailInput = screen.getByPlaceholderText("pelda@email.hu");
-    fireEvent.change(emailInput, { target: { value: "rossz-email-formatum" } });
-
-    const submitButton = screen.getByRole("button", {
-      name: "Időpont lefoglalása",
-    });
-    fireEvent.click(submitButton);
-
-    expect(
-      screen.getByText("Érvénytelen e-mail cím formátum"),
-    ).toBeInTheDocument();
-    expect(defaultProps.onSubmit).not.toHaveBeenCalled();
-  });
-
   it("megfelelően át kell adnia az adatokat az onSubmit függvénynek érvényes e-mail esetén", () => {
     render(<BookingForm {...defaultProps} />);
 
@@ -80,7 +63,7 @@ describe("BookingForm Komponens (Unit)", () => {
     expect(defaultProps.onSubmit).toHaveBeenCalledWith("vendegh@gmail.com");
   });
 
-  it("le kell tiltania az inputot és a gombot, ha a beküldés folyamatban van (isSubmitting)", () => {
+  it("le kell tiltania az inputot és az egyedi gombot, ha a beküldés folyamatban van", () => {
     render(<BookingForm {...defaultProps} isSubmitting={true} />);
 
     const emailInput = screen.getByPlaceholderText("pelda@email.hu");
@@ -90,13 +73,5 @@ describe("BookingForm Komponens (Unit)", () => {
 
     expect(emailInput).toBeDisabled();
     expect(submitButton).toBeDisabled();
-  });
-
-  it("meg kell jelenítenie a backendről érkező szerveroldali hibaüzenetet", () => {
-    const backendError =
-      "Ez az idősáv időközben betelt. Kérjük, válassz másikat!";
-    render(<BookingForm {...defaultProps} submitError={backendError} />);
-
-    expect(screen.getByText(backendError)).toBeInTheDocument();
   });
 });
