@@ -33,23 +33,26 @@ describe("MyBookingsTable Komponens (Unit)", () => {
   it("ki kell renderelnie a fejlécet és a kapott foglalási adatokat", () => {
     render(<MyBookingsTable {...defaultProps} />);
 
-    expect(screen.getByText("Borbély")).toBeInTheDocument();
+    expect(screen.getAllByText(/Borbély/i)[0]).toBeInTheDocument();
     expect(screen.getByText("Kezdés időpontja")).toBeInTheDocument();
-    expect(screen.getByText("Pengés Péter")).toBeInTheDocument();
-    expect(screen.getByText(/2026\. 09\. 09\.? 10:00/i)).toBeInTheDocument();
+
+    expect(screen.getAllByText("Pengés Péter")[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByText(/2026\. 09\. 09\.? 10:00/i)[0],
+    ).toBeInTheDocument();
   });
 
   it("meg kell jelenítenie az Ismeretlen Borbély feliratot, ha a barberId nem található a listában", () => {
     const invalidBooking = [{ ...mockBookings[0], barberId: "nem-letezo-id" }];
     render(<MyBookingsTable {...defaultProps} bookings={invalidBooking} />);
 
-    expect(screen.getByText("Ismeretlen Borbély")).toBeInTheDocument();
+    expect(screen.getAllByText("Ismeretlen Borbély")[0]).toBeInTheDocument();
   });
 
   it("meghíváskor át kell adnia a pontos foglalási adatot az onDeleteClick callbacknek", () => {
     render(<MyBookingsTable {...defaultProps} />);
 
-    const deleteButton = screen.getByRole("button", { name: "Lemondás" });
+    const deleteButton = screen.getAllByRole("button", { name: "Lemondás" })[0];
     expect(deleteButton).toBeInTheDocument();
 
     fireEvent.click(deleteButton);

@@ -16,9 +16,9 @@ export const BarberSelector = ({
   return (
     <Box sx={{ py: 5 }}>
       {/* Titles section */}
-      <Box sx={{ textAlign: "center", mb: 5 }}>
+      <Box sx={{ textAlign: "center", mb: 5, px: { xs: 1, sm: 2 } }}>
+        {" "}
         <Typography
-          variant="h4"
           component="h2"
           sx={{
             fontFamily: "serif",
@@ -26,13 +26,21 @@ export const BarberSelector = ({
             color: "#3D2314",
             textTransform: "uppercase",
             letterSpacing: "0.05em",
+            fontSize: { xs: "1.6rem", sm: "2rem", md: "2.125rem" },
+            wordBreak: "break-word",
+            lineHeight: 1.2,
           }}
         >
           Válassz Mesterborbélyt
         </Typography>
         <Typography
           variant="body1"
-          sx={{ color: "#8C6D58", mt: 1, fontWeight: 500 }}
+          sx={{
+            color: "#8C6D58",
+            mt: 1,
+            fontWeight: 500,
+            fontSize: { xs: "0.9rem", sm: "1rem" },
+          }}
         >
           Tapasztalt borbélyaink készen állnak a tökéletes stílus kialakítására.
         </Typography>

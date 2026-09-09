@@ -16,27 +16,27 @@
     "createdAt": "2026-09-08T19:27:13.177Z"
   },
   {
-    "id": "d3605dc4-c66d-4603-a5cf-20f91dd513e3",
-    "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
-    "customerEmail": "rpatocskai.developer@gmail.com",
-    "startTime": "2026-09-09T11:00:00.000Z",
-    "endTime": "2026-09-09T11:30:00.000Z",
-    "createdAt": "2026-09-08T20:50:39.140Z"
-  },
-  {
-    "id": "ad3d0e12-4e1a-4f4d-8556-d6427d14a271",
-    "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
+    "id": "de8ba550-f0e7-4843-a40c-cfcf2ff88e7d",
+    "barberId": "f9e8d7c6-b5a4-3c2d-1e0f-9a8b7c6d5e4f",
     "customerEmail": "rpatocskai.developer@gmail.com",
     "startTime": "2026-09-09T13:30:00.000Z",
     "endTime": "2026-09-09T14:00:00.000Z",
-    "createdAt": "2026-09-09T08:59:49.722Z"
+    "createdAt": "2026-09-09T12:38:25.712Z"
   },
   {
-    "id": "ae0edbd4-b5ab-4e12-82d6-cd9f8d1ece35",
+    "id": "578f8ba7-0872-4069-8578-213de8e14a7d",
     "barberId": "c7b3d8e0-5e0b-4b0f-8b3a-1b9d4b3c0d1e",
     "customerEmail": "rpatocskai.developer@gmail.com",
-    "startTime": "2026-09-09T09:30:00.000Z",
-    "endTime": "2026-09-09T10:00:00.000Z",
-    "createdAt": "2026-09-09T09:20:33.314Z"
+    "startTime": "2026-09-09T15:00:00.000Z",
+    "endTime": "2026-09-09T15:30:00.000Z",
+    "createdAt": "2026-09-09T12:38:43.979Z"
+  },
+  {
+    "id": "e7aed12b-d5ca-4029-9652-72cdb8087a0a",
+    "barberId": "a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d",
+    "customerEmail": "rpatocskai.developer@gmail.com",
+    "startTime": "2026-09-09T13:00:00.000Z",
+    "endTime": "2026-09-09T13:30:00.000Z",
+    "createdAt": "2026-09-09T12:40:17.645Z"
   }
 ]
