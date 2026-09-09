@@ -4,7 +4,15 @@
 
 <p align="center">Barber Booking System - Backend API Production Starter</p>
 
+## API Dokumentáció (Swagger)
+
+Az alkalmazás futása közben a teljes interaktív API dokumentáció és tesztfelület elérhető az alábbi címen:
+
+- **URL:** `http://localhost:3000/api/docs`
+- **Használat:** Kattints a jobb felső sarokban található **Authorize** gombra, és add meg a `.env` fájlban beállított `APP_API_KEY` értékét (`my-super-secret-backend-key-123`) a hitelesített kérésekhez.
+
 ## Tech Stack
+
 - **Framework:** NestJS
 - **Language:** TypeScript
 - **Persistence:** JSON Filestore Abstraction
@@ -23,6 +31,7 @@ A projekt futtatása előtt kötelező létrehozni a helyi környezeti változó
 ```
 
 ### Konfigurációs elvárások (`.env`):
+
 ```env
 PORT=3000
 BARBER_API_URL=https://vercel.app
@@ -71,4 +80,5 @@ A tesztelési környezet Fake Timers és Mocking technikákkal teljesen izolált
 ```
 
 ## License
+
 [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
