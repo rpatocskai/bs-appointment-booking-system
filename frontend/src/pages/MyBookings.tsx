@@ -1,30 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Typography,
-  TextField,
-  Button,
-  Card,
-  CardContent,
   Alert,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  CircularProgress,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  Button,
 } from "@mui/material";
-import EmailIcon from "@mui/icons-material/Email";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 import axios from "axios";
 import type { Barber } from "../features/barbers/types/barber.types";
+import { MyBookingsSearchForm } from "../features/bookings/components/MyBookingsSearchForm";
+import { MyBookingsTable } from "../features/bookings/components/MyBookingsTable";
 import { bookingsApi } from "../features/bookings/services/bookingApi";
 import type { UserBooking } from "../features/bookings/types/booking.types";
 
@@ -33,9 +22,6 @@ interface MyBookingsProps {
 }
 
 export const MyBookings = ({ barbers }: MyBookingsProps) => {
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState<string | null>(null);
-
   const [bookings, setBookings] = useState<UserBooking[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,24 +33,7 @@ export const MyBookings = ({ barbers }: MyBookingsProps) => {
   );
   const [deleting, setDeleting] = useState(false);
 
-  const validateEmail = (value: string): boolean => {
-    if (!value) {
-      setEmailError("Az e-mail cím megadása kötelező");
-      return false;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(value)) {
-      setEmailError("Érvénytelen e-mail cím formátum");
-      return false;
-    }
-    setEmailError(null);
-    return true;
-  };
-
-  const handleFetchBookings = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateEmail(email)) return;
-
+  const handleFetchBookings = async (email: string) => {
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
@@ -102,9 +71,7 @@ export const MyBookings = ({ barbers }: MyBookingsProps) => {
     setError(null);
     try {
       await bookingsApi.deleteBooking(bookingToDelete.id);
-
       setBookings((prev) => prev.filter((b) => b.id !== bookingToDelete.id));
-
       setSuccessMessage("Időpontodat sikeresen lemondtad.");
       closeDeleteConfirmation();
     } catch (err: unknown) {
@@ -117,25 +84,6 @@ export const MyBookings = ({ barbers }: MyBookingsProps) => {
     } finally {
       setDeleting(false);
     }
-  };
-
-  const getBarberName = (barberId: string): string => {
-    const barber = barbers.find((b) => b.id === barberId);
-    return barber ? barber.name : "Ismeretlen Borbély";
-  };
-
-  const formatDateTime = (isoString: string): string => {
-    const d = new Date(isoString);
-    const dateStr = d.toLocaleDateString("hu-HU", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
-    const timeStr = d.toLocaleTimeString("hu-HU", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    return `${dateStr} ${timeStr}`;
   };
 
   return (
@@ -159,80 +107,7 @@ export const MyBookings = ({ barbers }: MyBookingsProps) => {
         </Typography>
       </Box>
 
-      <Card
-        sx={{
-          bgcolor: "#f7f4eb",
-          border: "1px solid #e1dacb",
-          borderRadius: 2,
-          boxShadow: "none",
-          mb: 4,
-        }}
-      >
-        <CardContent sx={{ p: 4 }}>
-          <Box
-            component="form"
-            onSubmit={handleFetchBookings}
-            noValidate
-            sx={{
-              display: "flex",
-              gap: 2,
-              flexDirection: { xs: "column", sm: "row" },
-              alignItems: "flex-start",
-            }}
-          >
-            <TextField
-              fullWidth
-              placeholder="pelda@email.hu"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (emailError) setEmailError(null);
-              }}
-              error={Boolean(emailError)}
-              helperText={emailError}
-              disabled={loading}
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <EmailIcon sx={{ color: "#8c6d58", mr: 1 }} />
-                  ),
-                },
-              }}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  bgcolor: "#ffffff",
-                  "& fieldset": { borderColor: "#e1dacb" },
-                  "&:hover fieldset": { borderColor: "#2b1c11" },
-                  "&.Mui-focused fieldset": { borderColor: "#2b1c11" },
-                },
-              }}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={loading}
-              sx={{
-                py: 2,
-                px: 4,
-                borderRadius: 1.5,
-                fontWeight: "bold",
-                textTransform: "uppercase",
-                bgcolor: "#2b1c11",
-                color: "#ffffff",
-                whiteSpace: "nowrap",
-                width: { xs: "100%", sm: "auto" },
-                "&:hover": { bgcolor: "#1c120b" },
-              }}
-            >
-              {loading ? (
-                <CircularProgress size={24} sx={{ color: "#ffffff" }} />
-              ) : (
-                "Keresés"
-              )}
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
+      <MyBookingsSearchForm onSearch={handleFetchBookings} loading={loading} />
 
       {error && (
         <Alert
@@ -262,98 +137,11 @@ export const MyBookings = ({ barbers }: MyBookingsProps) => {
       )}
 
       {bookings.length > 0 && (
-        <TableContainer
-          component={Paper}
-          sx={{
-            bgcolor: "#FDFBF7",
-            boxShadow: "none",
-            border: "1px solid #E8E2D5",
-            borderRadius: 2,
-          }}
-        >
-          <Table>
-            <TableHead sx={{ bgcolor: "#f1ede2" }}>
-              <TableRow>
-                <TableCell
-                  sx={{
-                    fontWeight: "bold",
-                    color: "#3D2314",
-                    fontFamily: "serif",
-                  }}
-                >
-                  Borbély
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontWeight: "bold",
-                    color: "#3D2314",
-                    fontFamily: "serif",
-                  }}
-                >
-                  Kezdés időpontja
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontWeight: "bold",
-                    color: "#3D2314",
-                    fontFamily: "serif",
-                  }}
-                >
-                  Befejezés időpontja
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    fontWeight: "bold",
-                    color: "#3D2314",
-                    fontFamily: "serif",
-                  }}
-                >
-                  Művelet
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {bookings.map((booking) => (
-                <TableRow
-                  key={booking.id}
-                  sx={{ "&:hover": { bgcolor: "#f7f4eb" } }}
-                >
-                  <TableCell sx={{ color: "#2b1c11", fontWeight: 500 }}>
-                    {getBarberName(booking.barberId)}
-                  </TableCell>
-                  <TableCell sx={{ color: "#2b1c11" }}>
-                    {formatDateTime(booking.startTime)}
-                  </TableCell>
-                  <TableCell sx={{ color: "#2b1c11" }}>
-                    {formatDateTime(booking.endTime)}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      startIcon={<DeleteIcon />}
-                      onClick={() => openDeleteConfirmation(booking)}
-                      sx={{
-                        textTransform: "none",
-                        borderRadius: 1.5,
-                        fontWeight: "bold",
-                        borderColor: "#cbd5e1",
-                        color: "#9b1c1c",
-                        "&:hover": {
-                          bgcolor: "#fdf2f2",
-                          borderColor: "#9b1c1c",
-                        },
-                      }}
-                    >
-                      Lemondás
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <MyBookingsTable
+          bookings={bookings}
+          barbers={barbers}
+          onDeleteClick={openDeleteConfirmation}
+        />
       )}
 
       <Dialog
