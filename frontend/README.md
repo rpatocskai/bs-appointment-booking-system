@@ -22,7 +22,7 @@ Az API-val való típusbiztos kommunikációhoz kötelező beállítani a körny
 ### Konfigurációs elvárások (`.env`):
 ```env
 VITE_API_URL=http://localhost:3000
-VITE_APP_API_KEY=my-super-secret-backend-key-123
+VITE_APP_API_KEY=
 ```
 
 ## Project Setup
