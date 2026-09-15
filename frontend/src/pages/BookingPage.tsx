@@ -160,24 +160,55 @@ export const BookingPage = () => {
             "& .MuiTab-root": {
               fontFamily: "serif",
               fontWeight: "bold",
-              fontSize: "1.05rem",
+              fontSize: { xs: "0.95rem", sm: "1.05rem" },
               color: "#8C6D58",
               textTransform: "none",
-              px: 4,
+              px: { xs: 2, sm: 4 },
               py: 2,
+              minHeight: "72px",
               "&.Mui-selected": { color: "#3D2314" },
             },
           }}
         >
           <Tab
-            icon={<CalendarMonthIcon sx={{ mr: 1 }} />}
+            icon={<CalendarMonthIcon sx={{ mr: { xs: 0, sm: 1 } }} />}
             iconPosition="start"
-            label="Új Időpont Foglalása"
+            label={
+              <>
+                <Box
+                  component="span"
+                  sx={{ display: { xs: "inline", sm: "none" } }}
+                >
+                  Foglalás
+                </Box>
+                <Box
+                  component="span"
+                  sx={{ display: { xs: "none", sm: "inline" } }}
+                >
+                  Új Időpont Foglalása
+                </Box>
+              </>
+            }
           />
           <Tab
-            icon={<ContentPasteSearchIcon sx={{ mr: 1 }} />}
+            icon={<ContentPasteSearchIcon sx={{ mr: { xs: 0, sm: 1 } }} />}
             iconPosition="start"
-            label="Foglalásaim Kezelése"
+            label={
+              <>
+                <Box
+                  component="span"
+                  sx={{ display: { xs: "inline", sm: "none" } }}
+                >
+                  Időpontjaim
+                </Box>
+                <Box
+                  component="span"
+                  sx={{ display: { xs: "none", sm: "inline" } }}
+                >
+                  Foglalásaim Kezelése
+                </Box>
+              </>
+            }
           />
         </Tabs>
       </Box>
@@ -215,10 +246,11 @@ export const BookingPage = () => {
                 p: 1,
                 position: "relative",
                 width: "100%",
-                height: "95vh",
+                height: { xs: "100vh", sm: "95vh" },
                 maxHeight: "1000px",
                 display: "flex",
                 flexDirection: "column",
+                margin: { xs: 0, sm: 2 },
               },
             },
           }}
@@ -239,10 +271,11 @@ export const BookingPage = () => {
 
           <DialogContent
             sx={{
-              pt: 2,
-              px: 3,
+              pt: { xs: 6, sm: 2 },
+              px: { xs: 2, sm: 3 },
               pb: 3,
               flexGrow: 1,
+              overflowY: "auto",
             }}
           >
             {selectedBarber &&
@@ -269,7 +302,9 @@ export const BookingPage = () => {
 
                   {selectedSlot && (
                     <Box sx={{ mt: 2 }}>
-                      <Divider sx={{ my: 4, borderColor: "#E8E2D5" }} />
+                      <Divider
+                        sx={{ my: { xs: 2, sm: 4 }, borderColor: "#E8E2D5" }}
+                      />
                       <BookingForm
                         barberName={selectedBarber.name}
                         selectedDate={selectedDate}

@@ -90,7 +90,7 @@ export const MyBookings = ({ barbers }: MyBookingsProps) => {
     <Box sx={{ py: 3, mx: "auto", maxWidth: 850 }}>
       <Box sx={{ textAlign: "center", mb: 4 }}>
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             fontFamily: "serif",
             fontWeight: "bold",
