@@ -35,8 +35,8 @@ A projekt futtatása előtt kötelező létrehozni a helyi környezeti változó
 ```env
 PORT=3000
 BARBER_API_URL=https://vercel.app
-BARBER_API_KEY=08980fd4d393b390ec1d60a33945ff301e28c9092e660f593d6d182bc8364d2c
-APP_API_KEY=my-super-secret-backend-key-123
+BARBER_API_KEY=
+APP_API_KEY=
 FRONTEND_URL=http://localhost:5173
 ```
 
