@@ -91,7 +91,7 @@ A rendszer a **Domain-Driven Design (DDD)** és a **Clean Architecture** elveit 
 
 ```env
 VITE_API_URL=http://localhost:3000
-VITE_APP_API_KEY=my-super-secret-backend-key-123
+VITE_APP_API_KEY=
 ```
 
 ### Backend (`backend/.env`)
@@ -99,10 +99,10 @@ VITE_APP_API_KEY=my-super-secret-backend-key-123
 ```env
 PORT=3000
 BARBER_API_URL=https://barber-hono-on-vercel.vercel.app/api/v1
-BARBER_API_KEY=08980fd4d393b390ec1d60a33945ff301e28c9092e660f593d6d182bc8364d2c
+BARBER_API_KEY=
 
 #Own
-APP_API_KEY=my-super-secret-backend-key-123
+APP_API_KEY=
 
 FRONTEND_URL=http://localhost:5173
 ```
