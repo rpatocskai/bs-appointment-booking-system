@@ -205,7 +205,7 @@ export const BookingPage = () => {
           onClose={handleClosePopup}
           maxWidth="sm"
           fullWidth
-          scroll="body"
+          scroll="paper"
           slotProps={{
             paper: {
               sx: {
@@ -214,6 +214,11 @@ export const BookingPage = () => {
                 border: "1px solid #E8E2D5",
                 p: 1,
                 position: "relative",
+                width: "100%",
+                height: "95vh",
+                maxHeight: "1000px",
+                display: "flex",
+                flexDirection: "column",
               },
             },
           }}
@@ -232,7 +237,14 @@ export const BookingPage = () => {
             <CloseIcon />
           </IconButton>
 
-          <DialogContent sx={{ pt: 2 }}>
+          <DialogContent
+            sx={{
+              pt: 2,
+              px: 3,
+              pb: 3,
+              flexGrow: 1,
+            }}
+          >
             {selectedBarber &&
               (isSuccess ? (
                 <Box ref={successRef}>
