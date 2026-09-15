@@ -44,10 +44,12 @@ export const DateTimeSelector = ({
     });
   };
 
+  const todayStr = new Date().toISOString().split("T")[0];
+
   return (
-    <Box sx={{ mt: 4, mx: "auto", maxWidth: 900 }}>
+    <Box sx={{ mt: 2, mx: "auto", maxWidth: 600, width: "100%" }}>
       <Typography
-        variant="h4"
+        variant="h5"
         align="center"
         component="h2"
         sx={{
@@ -61,16 +63,16 @@ export const DateTimeSelector = ({
         IDŐPONT VÁLASZTÁSA
       </Typography>
       <Typography
-        variant="body1"
+        variant="body2"
         align="center"
-        sx={{ color: "#6d5c50", mb: 4 }}
+        sx={{ color: "#6d5c50", mb: 3 }}
       >
         Válaszd ki a számodra megfelelő napot és szabad idősávot{" "}
         <strong>{selectedBarberName}</strong> naptárából.
       </Typography>
 
-      <Grid container spacing={4}>
-        <Grid size={{ xs: 12, md: 5 }}>
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12 }}>
           <Card
             sx={{
               bgcolor: "#f7f4eb",
@@ -79,7 +81,65 @@ export const DateTimeSelector = ({
               boxShadow: "none",
             }}
           >
-            <CardContent sx={{ p: 3 }}>
+            <CardContent sx={{ p: 2.5 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  mb: 1.5,
+                  color: "#2b1c11",
+                }}
+              >
+                <CalendarMonthIcon sx={{ mr: 1, fontSize: "1.2rem" }} />
+                <Typography
+                  variant="subtitle1"
+                  sx={{ fontWeight: "bold", fontFamily: "serif" }}
+                >
+                  Dátum kijelölése
+                </Typography>
+              </Box>
+
+              <TextField
+                type="date"
+                fullWidth
+                value={selectedDate}
+                onChange={(e) => onDateChange(e.target.value)}
+                slotProps={{
+                  htmlInput: {
+                    min: todayStr,
+                  },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    bgcolor: "#ffffff",
+                    "& fieldset": { borderColor: "#cbd5e1" },
+                    "&:hover fieldset": { borderColor: "#2b1c11" },
+                    "&.Mui-focused fieldset": { borderColor: "#2b1c11" },
+                    "& input::-webkit-calendar-picker-indicator": {
+                      cursor: "pointer",
+                      filter:
+                        "invert(10%) sepia(20%) saturate(1000%) hue-rotate(340deg)",
+                    },
+                  },
+                }}
+              />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <Card
+            sx={{
+              bgcolor: "#f7f4eb",
+              border: "1px solid #e1dacb",
+              borderRadius: 2,
+              boxShadow: "none",
+              minHeight: 220,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <CardContent sx={{ p: 2.5, flexGrow: 1 }}>
               <Box
                 sx={{
                   display: "flex",
@@ -88,82 +148,9 @@ export const DateTimeSelector = ({
                   color: "#2b1c11",
                 }}
               >
-                <CalendarMonthIcon sx={{ mr: 1 }} />
+                <AccessTimeIcon sx={{ mr: 1, fontSize: "1.2rem" }} />
                 <Typography
-                  variant="h6"
-                  sx={{ fontWeight: "bold", fontFamily: "serif" }}
-                >
-                  Dátum kijelölése
-                </Typography>
-              </Box>
-              <TextField
-                type="date"
-                fullWidth
-                value={selectedDate}
-                onChange={(e) => onDateChange(e.target.value)}
-                slotProps={{
-                  inputLabel: { shrink: true },
-                  htmlInput: {
-                    min: new Date().toISOString().split("T")[0],
-                    onClick: (e: React.MouseEvent<HTMLInputElement>) => {
-                      try {
-                        e.currentTarget.showPicker();
-                      } catch (err) {
-                        console.warn(
-                          "showPicker nem támogatott ebben a böngészőben",
-                          err,
-                        );
-                      }
-                    },
-                    onFocus: (e: React.FocusEvent<HTMLInputElement>) => {
-                      try {
-                        e.currentTarget.showPicker();
-                      } catch (err) {
-                        console.warn(
-                          "showPicker nem támogatott ebben a böngészőben",
-                          err,
-                        );
-                      }
-                    },
-                  },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    bgcolor: "#ffffff",
-                    cursor: "pointer",
-                    "& input": { cursor: "pointer" },
-                    "& fieldset": { borderColor: "#cbd5e1" },
-                    "&:hover fieldset": { borderColor: "#2b1c11" },
-                    "&.Mui-focused fieldset": { borderColor: "#2b1c11" },
-                  },
-                }}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 7 }}>
-          <Card
-            sx={{
-              bgcolor: "#f7f4eb",
-              border: "1px solid #e1dacb",
-              borderRadius: 2,
-              boxShadow: "none",
-              minHeight: 200,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  mb: 3,
-                  color: "#2b1c11",
-                }}
-              >
-                <AccessTimeIcon sx={{ mr: 1 }} />
-                <Typography
-                  variant="h6"
+                  variant="subtitle1"
                   sx={{ fontWeight: "bold", fontFamily: "serif" }}
                 >
                   Elérhető idősávok
@@ -171,7 +158,14 @@ export const DateTimeSelector = ({
               </Box>
 
               {loading && (
-                <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    py: 6,
+                  }}
+                >
                   <CircularProgress sx={{ color: "#2b1c11" }} />
                 </Box>
               )}
@@ -190,13 +184,23 @@ export const DateTimeSelector = ({
               )}
 
               {!loading && !error && slots.length === 0 && (
-                <Typography
-                  align="center"
-                  sx={{ color: "#7f6d5f", py: 4, fontStyle: "italic" }}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    py: 4,
+                    flexGrow: 1,
+                  }}
                 >
-                  Ezen a napon nincs elérhető szabad időpont, vagy a szalon
-                  zárva tart.
-                </Typography>
+                  <Typography
+                    align="center"
+                    sx={{ color: "#7f6d5f", fontStyle: "italic" }}
+                  >
+                    Ezen a napon nincs elérhető szabad időpont, vagy a szalon
+                    zárva tart.
+                  </Typography>
+                </Box>
               )}
 
               {!loading && !error && slots.length > 0 && (
@@ -205,17 +209,17 @@ export const DateTimeSelector = ({
                     const isSelected =
                       selectedSlot?.startTime === slot.startTime;
                     return (
-                      <Grid size={{ xs: 4, sm: 3 }} key={index}>
+                      <Grid size={{ xs: 4 }} key={index}>
                         <Button
                           fullWidth
                           variant={isSelected ? "contained" : "outlined"}
                           onClick={() => onSlotSelect(slot)}
                           sx={{
-                            py: 1.5,
+                            py: 1.2,
                             borderRadius: 1.5,
                             fontWeight: "bold",
                             textTransform: "none",
-                            fontSize: "0.95rem",
+                            fontSize: "0.9rem",
                             bgcolor: isSelected ? "#2b1c11" : "#ffffff",
                             color: isSelected ? "#ffffff" : "#2b1c11",
                             borderColor: isSelected ? "#2b1c11" : "#e1dacb",

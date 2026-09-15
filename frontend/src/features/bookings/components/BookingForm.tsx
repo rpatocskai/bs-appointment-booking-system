@@ -74,7 +74,7 @@ export const BookingForm = ({
   return (
     <Box ref={formRef} sx={{ mt: 5, mx: "auto", maxWidth: 600 }}>
       <Typography
-        variant="h4"
+        variant="h5"
         align="center"
         component="h2"
         sx={{
